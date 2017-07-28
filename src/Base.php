@@ -6,11 +6,11 @@
  * Time: 14:56
  */
 
-namespace Creation;
+namespace CreationMedia;
 
-use CreationMedia\Config;
 use CreationMedia\Utilities\General;
 use CreationMedia\Utilities\Mapper;
+use CreationMedia\Utilities\Cache;
 
 class Base
 {
@@ -31,7 +31,7 @@ class Base
     public function __construct()
     {
         $this->f3 = \Base::instance();
-        $this->cache = Utilities\Cache::instance();
+        $this->cache = Cache::instance();
         $this->cache->load(Config::get('CACHE_DSN'), Config::get('CACHE_PREFIX'));
         $this->db = $this->f3->get('DB');
     }
@@ -52,7 +52,7 @@ class Base
         $this->model = new Mapper($this->db, $table);
         return $this->model;
     }
-    
+
 
     /**
      * Find property of any item

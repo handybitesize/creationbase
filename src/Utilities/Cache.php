@@ -1,6 +1,6 @@
 <?php
 
-namespace Creation\Utilities;
+namespace CreationMedia\Utilities;
 
 use CreationMedia\Config;
 use CreationMedia\Exception\CacheException;
