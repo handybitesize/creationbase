@@ -34,8 +34,9 @@ class General
     {
         //todo add cache buster to grunt
         $cachebust = [];
-        $str = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/app/assets/json/cachebust.json');
-        $json = json_decode($str);
+        $str = @file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/app/assets/json/cachebust.json');
+        $json = json_decode($str) ?: [];
+
         foreach ($json as $k => $v) {
             if (HOST_TYPE == 'local') {
                 //debug deployments
@@ -49,7 +50,7 @@ class General
                 $cachebust[basename($k)] = ltrim(str_replace('/static', '' ,$k), '.');
 
             } else {
-                $cachebust[basename($k)] = sprintf('//static.noahsarkzoofarm.co.uk/%s', str_replace('./build/static/', '', $v));
+                $cachebust[basename($k)] = sprintf('//%s/%s', Config::get('STATIC_URL'), str_replace('./build/static/', '', $v));
             }
 
         }

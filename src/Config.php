@@ -22,32 +22,36 @@ class Config
     {
         date_default_timezone_set('UTC');
         ini_set('session.gc_maxlifetime', 7200);
+
+        $f3 = \Base::instance();
+
         if (General::isAWS()) {
             if (file_exists('/etc/profile.d/eb_envvars.sh')) {
                 // its ec2 cli
                 self::loadEbEnvVars();
             }
         } else {
-            require(sprintf('%s/LocalConfig.php', dirname(dirname(dirname(__DIR__)))));
+            $configFile = sprintf("%s/LocalConfig.php", $f3->get('ROOT'));
+
+            require($configFile);
             new \LocalConfig();
         }
 
-        $f3 = \Base::instance();
-
         $f3->set('DEBUG', Config::get('F3_DEBUG'));
-
         $f3->set('DB', self::loadDb());
 
-
-        if (Config::get('APPLICATION_TYPE') == 'web') {
+        if (self::get('APPLICATION_TYPE') == 'web') {
             new Session();
         }
 
-        if (self::get('ENVIRONMENT') == 'development') {
-            \Kint::enabled(true);
-        } else {
-            \Kint::enabled(false);
-        }
+        \Kint::$enabled_mode = (self::get('ENVIRONMENT') == 'development');
+        \Kint::$aliases[] = 'ddd';
+        \Kint::$aliases[] = 'sd';
+        \Kint::$plugins[] = 'Kint_Parser_Microtime';
+
+
+        require_once dirname(__FILE__).'/init_helpers.php';
+
 
         if ($f3->get('SERVER.HTTP_HOST')) {
             $host = $_SERVER['HTTP_HOST'];
@@ -70,12 +74,14 @@ class Config
         }
     }
 
+
+
     public static function loadDb()
     {
         $dbConStr = sprintf(
             'mysql:host=%s;port=3306;dbname=%s',
-            Config::get('DB_HOSTNAME'),
-            Config::get('DB_DATABASE')
+            self::get('DB_HOSTNAME'),
+            self::get('DB_DATABASE')
         );
         $dbConStr = str_replace('"', '', $dbConStr);
         $dbOptions = [];
@@ -94,8 +100,8 @@ class Config
                 try {
                     $db = new SQL(
                         $dbConStr,
-                        Config::get('DB_USERNAME'),
-                        Config::get('DB_PASSWORD'),
+                        self::get('DB_USERNAME'),
+                        self::get('DB_PASSWORD'),
                         $dbOptions
                     );
                     $db->exec( "SET CHARACTER SET utf8" );
