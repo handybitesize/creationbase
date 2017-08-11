@@ -83,5 +83,19 @@ class Base
         General::flushJsonResponse($a, $statusCode);
     }
 
+    public function cast()
+    {
+        return get_object_vars($this);
+
+    }
+
+    protected function auth($key, $login_page='/admin/login')
+    {
+        if ((bool) $this->f3->get($key)){
+            return true;
+        }
+        $this->f3->reroute($login_page);
+    }
+
 
 }
