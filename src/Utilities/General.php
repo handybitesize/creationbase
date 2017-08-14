@@ -98,7 +98,7 @@ class General
     {
         return chr(27) . "$color" . "$str" . chr(27) . "[0m";
     }
-    
+
     public static function getBodyArrayFromWebRequest($body){
         $out = [];
         $body = explode("\n", $body);

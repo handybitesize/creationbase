@@ -1,5 +1,5 @@
 {
-    "name": "creationmedia/base",
+    "name": "handybitesize/creationbase",
     "require": {
         "bcosca/fatfree": "^3.6",
         "aws/aws-sdk-php": "^3.32",
