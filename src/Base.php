@@ -92,9 +92,31 @@ class Base
     protected function auth($key, $login_page='/admin/login')
     {
         if ((bool) $this->f3->get($key)){
-            return true;
+            return $this;
         }
         $this->f3->reroute($login_page);
+    }
+
+    protected function apiAuth($key)
+    {
+        if ((bool) $this->f3->get($key)){
+            return true;
+        }
+        $this->f3->error(401);
+    }
+
+    protected function needs($level, $field = 'access_level', $sessionKey = false)
+    {
+        if ($sessionKey) {
+            $session = $this->f3->get($sessionKey);
+        } else {
+            $session = $this->f3->get($this->sessionKey);
+        }
+
+        if (intval($session[$field]) >= $level) {
+            return true;
+        }
+        $this->f3->error(403);
     }
 
 

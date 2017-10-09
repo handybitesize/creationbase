@@ -15,7 +15,7 @@ class Twig extends \Twig_Environment
         $this->f3 = \Base::instance();
         if (PHP_SAPI === 'cli') {
             return false;
-        }
+        }   
         $this->onReadyArray = [];
         $this->onLoadArray = [];
         $this->inject = [];
@@ -35,7 +35,7 @@ class Twig extends \Twig_Environment
         $this->addExtension(new \Twig_Extensions_Extension_Text());
         $this->addGlobal('static_cache', General::getCacheBuster());
         $this->addGlobal('on_ready', null);
-
+        $this->addGlobal('on_load', null);
 
         $func = new \Twig_SimpleFunction(
             'img',
