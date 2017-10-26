@@ -114,7 +114,7 @@ class Cache
     }
     public function exists($key, &$value = null)
     {
-        if (Config::get('CACHE_DISABLE') !== 'true') {
+        if (Config::get('CACHE_DISABLE') == 'true') {
             return false;
         }
 
