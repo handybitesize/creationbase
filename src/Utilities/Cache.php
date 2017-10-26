@@ -99,7 +99,7 @@ class Cache
     }
     public function set($key, $val, $ttl = null)
     {
-        if (Config::get('CACHE_DISABLE') !== 'true') {
+        if (Config::get('CACHE_DISABLE') == 'true') {
             return false;
         }
 
